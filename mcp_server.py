@@ -2,11 +2,20 @@ import os
 import json
 import socket
 from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp.settings import FastMCPSettings
 
 BLENDER_HOST = os.getenv("BLENDER_HOST", "127.0.0.1")
 BLENDER_PORT = int(os.getenv("BLENDER_PORT", "65432"))
 
-mcp = FastMCP("Blender MCP Server")
+# Allow Railway domain
+settings = FastMCPSettings(
+    allowed_hosts=["*"],   # allow all hosts (safe for demo)
+)
+
+mcp = FastMCP(
+    "Blender MCP Server",
+    settings=settings
+)
 
 
 def send_to_blender(code: str):
