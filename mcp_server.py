@@ -3,8 +3,8 @@ import json
 import socket
 from mcp.server.fastmcp import FastMCP
 
-# 🔥 Tell MCP we are behind a proxy (Railway)
-os.environ["MCP_DISABLE_TRANSPORT_SECURITY"] = "true"
+# Tell MCP it's behind a trusted proxy
+os.environ["MCP_TRUST_PROXY"] = "true"
 
 BLENDER_HOST = os.getenv("BLENDER_HOST", "127.0.0.1")
 BLENDER_PORT = int(os.getenv("BLENDER_PORT", "65432"))
@@ -27,8 +27,8 @@ def send_to_blender(code: str):
 
 @mcp.tool()
 def execute_blender_code(code: str) -> dict:
-    """Execute raw Blender bpy Python code."""
     return send_to_blender(code)
 
 
-app = mcp.sse_app()
+# IMPORTANT: trust proxy headers
+app = mcp.sse_app(trust_proxy=True)
