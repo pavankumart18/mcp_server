@@ -3,7 +3,9 @@ import json
 import socket
 from mcp.server.fastmcp import FastMCP
 
-# Blender socket config
+# 🔥 Tell MCP we are behind a proxy (Railway)
+os.environ["MCP_DISABLE_TRANSPORT_SECURITY"] = "true"
+
 BLENDER_HOST = os.getenv("BLENDER_HOST", "127.0.0.1")
 BLENDER_PORT = int(os.getenv("BLENDER_PORT", "65432"))
 
@@ -25,12 +27,8 @@ def send_to_blender(code: str):
 
 @mcp.tool()
 def execute_blender_code(code: str) -> dict:
-    """
-    Execute raw Blender bpy Python code inside Blender
-    and return execution result.
-    """
+    """Execute raw Blender bpy Python code."""
     return send_to_blender(code)
 
 
-# Expose ASGI app for production deployment
 app = mcp.sse_app()
